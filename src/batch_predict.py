@@ -17,19 +17,21 @@ if __name__ == '__main__':
 
     prediction = []
     file_indexs = []
+    im_ind = 0
+    print('Start Prediction: ')
     for file in files:
+        print(im_ind, file)
         img_path = os.path.join(test_path, file)
         img_pil = load_img(img_path, target_size=(224, 224))
         img = img_to_array(img_pil)
         img = np.expand_dims(img, axis=0)
-        # imgs.append(img)
         result = model.predict(img)
         file_name, suffix = file.split('.')
         prediction.append(result[0][1])
         file_indexs.append(file_name)
-        print(file, result, file_name)
-
-
+        print('     ', result[0][1], file_name)
+        im_ind += 1
+    print('Finish prediction. ')
 
     df = pd.DataFrame({'id':file_indexs, 'label':prediction})
     df.to_csv('pred2.csv', index=None)
